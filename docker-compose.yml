@@ -1,0 +1,58 @@
+services:
+  api:
+    build: .
+    container_name: storage_api
+    ports:
+      - "8000:8000"
+    environment:
+      POSTGRES_DSN: postgresql://blog:blog@postgres:5432/blog
+      MEMCACHED_HOST: memcached
+      REDIS_HOST: redis
+      DYNAMODB_ENDPOINT: http://dynamodb:8000
+      AWS_ACCESS_KEY_ID: local
+      AWS_SECRET_ACCESS_KEY: local
+    depends_on:
+      - postgres
+      - memcached
+      - redis
+      - dynamodb
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: blog
+      POSTGRES_USER: blog
+      POSTGRES_PASSWORD: blog
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  memcached:
+    image: memcached:1.6-alpine
+    command: memcached -m 64
+    ports:
+      - "11211:11211"
+
+  redis:
+    image: redis:8-alpine
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+
+  dynamodb:
+    image: amazon/dynamodb-local:latest
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
+    working_dir: /home/dynamodblocal
+    volumes:
+      - dynamodb_data:/home/dynamodblocal/data
+    ports:
+      - "8001:8000"
+
+volumes:
+  postgres_data:
+  redis_data:
+  dynamodb_data:
