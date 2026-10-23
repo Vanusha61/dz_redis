@@ -1,0 +1,19 @@
+{
+  "engine": "ClickHouse local",
+  "version": "26.11.1.660",
+  "storage": "MergeTree",
+  "docker_executed": false,
+  "rows": 1999657,
+  "files": [
+    {
+      "file": "trips_1.gz",
+      "bytes": 81801789,
+      "sha256": "f1c061395704ca9fd12b2920b14904e1ca661506899bf6c65f61cbe0c0d0940a"
+    },
+    {
+      "file": "trips_2.gz",
+      "bytes": 81794702,
+      "sha256": "6076f2ee5cc1769dad9853972526c475dc23f7a87490b7d1d859068196bb4564"
+    }
+  ]
+}

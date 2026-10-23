@@ -1,0 +1,20 @@
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server:25.8
+    environment:
+      CLICKHOUSE_DB: taxi
+      CLICKHOUSE_USER: student
+      CLICKHOUSE_PASSWORD: taxi_practice_local
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: "1"
+    ports:
+      - "127.0.0.1:8123:8123"
+    volumes:
+      - taxi_data:/var/lib/clickhouse
+      - ./data:/var/lib/clickhouse/user_files:ro
+    healthcheck:
+      test: ["CMD", "clickhouse-client", "--user", "student", "--password", "taxi_practice_local", "--query", "SELECT 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+volumes:
+  taxi_data:
